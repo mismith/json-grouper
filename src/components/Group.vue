@@ -4,13 +4,13 @@
       <div class="name">
         <div v-if="!group">Ungrouped</div>
         <md-input-container v-if="group">
-          <md-input :value="groupName" v-model="name" :placeholder="`Group ${group}`" @input="handleNameChange" />
+          <md-input :value="groupName" v-model="name" :placeholder="`Group ${group}`" @input="handleNameChange($event)" />
         </md-input-container>
       </div>
       <div class="total" @click="collapsable && (collapsed = !collapsed)">{{ total() }}</div>
     </header>
     <div v-if="!collapsed">
-      <datum v-for="datum in data" :key="datum.name" :datum="datum" />
+      <datum v-for="datum in sortedData" :key="datum.name" :datum="datum" />
     </div>
     <slot />
   </droppable>
@@ -43,6 +43,11 @@ export default {
       collapsed: false,
     };
   },
+  computed: {
+    sortedData() {
+      return this.data.sort((a, b) => (a.votes - b.votes) || (a.group - b.group)).reverse();
+    },
+  },
   methods: {
     total() {
       return this.data.reduce((votes, datum) => votes + datum.votes, 0);
@@ -70,6 +75,7 @@ export default {
 .group {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   min-width: 100px;
   background-color: rgba(0,0,0,.1);
   border: dashed 2px transparent;

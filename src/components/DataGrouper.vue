@@ -3,7 +3,7 @@
     <group :data="grouped()" :collapsable="false" @drag-drop="handleMove($event)" />
     <droppable class="groups" @drag-drop="handleMove($event, null)">
       <div>
-        <group v-for="group in numGroups" :key="group" :group="group" :data="grouped(group)" :group-name="groupNames[group]" @group-name-change="handleGroupNameChange" @drag-drop="handleMove($event, group)" />
+        <group v-for="group in groupNumsSortedByTotal" :key="group" :group="group" :data="grouped(group)" :group-name="groupNames[group]" @group-name-change="handleGroupNameChange($event)" @drag-drop="handleMove($event, group)" />
       </div>
     </droppable>
   </div>
@@ -18,7 +18,7 @@ export default {
   props: {
     initialData: {
       type: Object,
-      default: [],
+      default: {},
     },
   },
   data() {
@@ -30,6 +30,17 @@ export default {
   computed: {
     numGroups() {
       return this.data.reduce((group, datum) => Math.max(group, datum.group || 0), 0);
+    },
+    groupNumsSortedByTotal() {
+      const groupNums = [];
+      for (let group = 1; group < this.numGroups; group += 1) {
+        groupNums.push({
+          group,
+          total: this.grouped(group || undefined).reduce((votes, datum) => votes + datum.votes, 0),
+        });
+      }
+      return groupNums.sort((a, b) => (a.total - b.total) || (a.group - b.group))
+        .reverse().map(groupNum => groupNum.group);
     },
   },
   methods: {
@@ -63,11 +74,10 @@ export default {
       a.click();
     },
   },
-  created() {
+  mounted() {
     this.data = this.initialData.data || [];
     this.groupNames = this.initialData.groupNames || {};
-  },
-  mounted() {
+
     this.EventBus.$on('download', this.download);
   },
   components: {
@@ -102,6 +112,7 @@ export default {
     flex-wrap: wrap;
 
     .group {
+      min-width: 300px;
       max-width: calc(25% - 10px);
       max-height: calc(50vh - 10px);
     }

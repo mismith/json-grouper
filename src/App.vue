@@ -22,13 +22,13 @@
 
 <script>
 import DataGrouper from './components/DataGrouper';
-import data from '../static/grouped.json';
+import SourceData from '../static/grouped.json';
 
 export default {
   name: 'app',
   data() {
     return {
-      data,
+      data: SourceData,
     };
   },
   components: {
