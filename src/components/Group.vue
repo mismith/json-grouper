@@ -1,0 +1,127 @@
+<template>
+  <droppable @drag-drop="$emit('drag-drop', $event)" v-if="!group || (group && data.length)" class="group" :class="{collapsable, collapsed}">
+    <header>
+      <div class="name">
+        <div v-if="!group">Ungrouped</div>
+        <md-input-container v-if="group">
+          <md-input :value="groupName" v-model="name" :placeholder="`Group ${group}`" @input="handleNameChange" />
+        </md-input-container>
+      </div>
+      <div class="total" @click="collapsable && (collapsed = !collapsed)">{{ total() }}</div>
+    </header>
+    <div v-if="!collapsed">
+      <datum v-for="datum in data" :key="datum.name" :datum="datum" />
+    </div>
+    <slot />
+  </droppable>
+</template>
+
+<script>
+import Droppable from './Droppable';
+import Datum from './Datum';
+
+export default {
+  name: 'group',
+  props: {
+    group: {
+      type: Number,
+    },
+    data: {
+      type: Array,
+    },
+    groupName: {
+      type: String,
+    },
+    collapsable: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data() {
+    return {
+      name: undefined,
+      collapsed: false,
+    };
+  },
+  methods: {
+    total() {
+      return this.data.reduce((votes, datum) => votes + datum.votes, 0);
+    },
+    handleNameChange(e) {
+      this.$emit('group-name-change', [this.name, this.group, e]);
+    },
+  },
+  mounted() {
+    this.EventBus.$on('group.expandAll', () => {
+      if (this.collapsable) this.collapsed = false;
+    });
+    this.EventBus.$on('group.collapseAll', () => {
+      if (this.collapsable) this.collapsed = true;
+    });
+  },
+  components: {
+    Droppable,
+    Datum,
+  },
+};
+</script>
+
+<style lang="scss">
+.group {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+  background-color: rgba(0,0,0,.1);
+  border: dashed 2px transparent;
+  border-radius: 10px;
+  margin: 5px;
+
+  > header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 10px;
+
+    .name {
+      padding: 0 10px;
+      font-size: 16px;
+      flex-grow: 1;
+    }
+    .total {
+      min-height: 3em;
+      min-width: 3em;
+      line-height: 3em;
+      background-color: rgba(0,0,0,.1);
+      text-align: center;
+      border-radius: 50%;
+    }
+  }
+  > div {
+    padding: 10px;
+    overflow: auto;
+  }
+  &.collapsable {
+    > header {
+      .total {
+        cursor: pointer;
+      }
+    }
+    &.collapsed {
+      > header {
+        .total {
+          background-color: rgba(0,0,0,.5);
+          color: rgba(255,255,255,1);
+        }
+      }
+    }
+  }
+  &.dragover {
+    border-color: rgba(0,0,0,.5);
+  }
+}
+.md-input-container {
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+}
+</style>
