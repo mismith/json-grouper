@@ -7,7 +7,9 @@
           <md-input :value="groupName" v-model="name" :placeholder="`Group ${group}`" @input="handleNameChange($event)" />
         </md-input-container>
       </div>
-      <div class="total" @click="collapsable && (collapsed = !collapsed)">{{ total() }}</div>
+      <div class="total" @click="collapsable && (collapsed = !collapsed)">
+        {{ total() }}
+      </div>
     </header>
     <div v-if="!collapsed">
       <datum v-for="datum in sortedData" :key="datum.name" :datum="datum" />

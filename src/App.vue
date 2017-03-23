@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <md-toolbar class="md-dense">
-      <h1 class="md-title">JSON Grouper</h1>
+      <h1 class="md-title">SMART Marketing Team Survey</h1>
       <span style="flex-grow: 1"></span>
       <md-button @click.native="EventBus.$emit('group.collapseAll')" class="md-icon-button">
         <md-icon>remove_circle</md-icon>
