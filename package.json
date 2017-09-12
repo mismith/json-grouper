@@ -1,7 +1,7 @@
 {
-  "name": "json-grouper",
+  "name": "list-grouper",
   "version": "1.0.0",
-  "description": "Visually group data objects by drag-n-drop grouping them together",
+  "description": "Visually group lists by drag-n-drop grouping items together",
   "author": "Murray <murray@mismith.info>",
   "private": true,
   "scripts": {

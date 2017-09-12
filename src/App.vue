@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <md-toolbar class="md-dense">
-      <h1 class="md-title">JSON Grouper</h1>
+      <h1 class="md-title">List Grouper</h1>
       <span style="flex-grow: 1"></span>
 
       <md-button class="md-icon-button file-upload-button">
