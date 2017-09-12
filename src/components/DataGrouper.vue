@@ -61,23 +61,28 @@ export default {
       this.groupNames[group] = name || undefined;
     },
 
-    download() {
+    download(contents, filename = undefined) {
+      const a = document.createElement('a');
+      a.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(contents)}`);
+      a.setAttribute('download', filename);
+      a.click();
+    },
+    exportJson() {
       const bundle = {
         groupNames: this.groupNames,
         data: this.data,
       };
       const json = JSON.stringify(bundle, null, 2);
-      const a = document.createElement('a');
-      a.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(json)}`);
-      a.setAttribute('download', 'grouped.json');
-      a.click();
+
+      this.download(json, 'grouped.json');
+    },
     },
   },
   mounted() {
     this.data = this.initialData.data || [];
     this.groupNames = this.initialData.groupNames || {};
 
-    this.EventBus.$on('download', this.download);
+    this.EventBus.$on('export-json', this.exportJson);
   },
   components: {
     Droppable,

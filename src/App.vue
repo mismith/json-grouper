@@ -11,9 +11,10 @@
         <md-icon>add_circle</md-icon>
         <md-tooltip>Expand All</md-tooltip>
       </md-button>
-      <md-button @click.native="EventBus.$emit('download')" class="md-icon-button">
+      <md-button @click.native="EventBus.$emit('export-json')" class="md-icon-button">
         <md-icon>file_download</md-icon>
-        <md-tooltip>Download</md-tooltip>
+        <md-tooltip>Export JSON</md-tooltip>
+      </md-button>
       </md-button>
     </md-toolbar>
     <data-grouper v-if="data" :initial-data="data" />
