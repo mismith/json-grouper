@@ -1,5 +1,5 @@
 <template>
-  <draggable :drag-data="datum.name" class="datum">
+  <draggable :drag-data="datum" class="datum">
     <header>
       <div class="name">{{ datum.name }}</div>
       <div class="total">{{ datum.votes }}</div>

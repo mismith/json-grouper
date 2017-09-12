@@ -48,9 +48,10 @@ export default {
     grouped(group) {
       return this.data.filter(d => d.group === group);
     },
-    handleMove([datumName], group = undefined) {
+    handleMove([datum], group = undefined) {
+      console.log(datum);
       if (this.data) {
-        const i = this.data.findIndex(d => d.name === datumName);
+        const i = this.data.findIndex(d => d.$id === datum.$id);
 
         if (i >= 0) {
           this.$set(this.data[i], 'group', group === null ? (this.numGroups + 1) : group);
