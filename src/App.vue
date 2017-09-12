@@ -22,14 +22,51 @@
 
 <script>
 import DataGrouper from './components/DataGrouper';
-import SourceData from '../static/grouped.json';
 
 export default {
   name: 'app',
   data() {
     return {
-      data: SourceData,
+      data: undefined,
     };
+  },
+  methods: {
+    loadText(url) {
+      return fetch(url)
+        .then(res => res.text())
+        .then((text) => {
+          const data = [];
+          const lines = text.replace(/^\s+|\s+$/ig, '').split('\n');
+          lines.forEach((line, i) => {
+            data.push({
+              $id: i,
+              name: line.replace(/^\s+|\s+$/ig, ''),
+              votes: 1,
+            });
+          });
+          this.data = {
+            data,
+          };
+        });
+    },
+    loadJson(url) {
+      return fetch(url)
+        .then(res => res.json())
+        .then((json) => {
+          let data = {};
+          if (json.data) {
+            data = json;
+          } else {
+            data = {
+              data: json,
+            };
+          }
+          this.data = data;
+        });
+    },
+  },
+  created() {
+    this.loadJson('/static/grouped.json');
   },
   components: {
     DataGrouper,

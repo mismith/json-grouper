@@ -49,7 +49,6 @@ export default {
       return this.data.filter(d => d.group === group);
     },
     handleMove([datum], group = undefined) {
-      console.log(datum);
       if (this.data) {
         const i = this.data.findIndex(d => d.$id === datum.$id);
 
@@ -61,6 +60,7 @@ export default {
     handleGroupNameChange([name, group]) {
       this.groupNames[group] = name || undefined;
     },
+
     download() {
       const bundle = {
         groupNames: this.groupNames,
