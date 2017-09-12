@@ -62,22 +62,35 @@ export default {
       this.groupNames[group] = name || undefined;
     },
 
-    download(contents, filename = undefined) {
+    download(contents, filename = 'grouped', extension = 'txt') {
       const a = document.createElement('a');
-      a.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(contents)}`);
-      a.setAttribute('download', filename);
+      let mime;
+      switch (extension) {
+        case 'json':
+          mime = 'application/json';
+          break;
+        case 'csv':
+          mime = 'text/csv';
+          break;
+        case 'txt':
+        default:
+          mime = 'text/plain';
+          break;
+      }
+      a.setAttribute('href', `data:${mime};charset=utf-8,${encodeURIComponent(contents)}`);
+      a.setAttribute('download', `${filename}.${extension}`);
       a.click();
     },
-    exportJson() {
+    exportJson(filename = undefined) {
       const bundle = {
         groupNames: this.groupNames,
         data: this.data,
       };
       const json = JSON.stringify(bundle, null, 2);
 
-      this.download(json, 'grouped.json');
+      this.download(json, filename, 'json');
     },
-    exportCsv() {
+    exportCsv(filename = undefined) {
       const groups = [];
       this.groupNumsSortedByTotal.concat(undefined).forEach((groupNum) => {
         groups.push(this.grouped(groupNum));
@@ -92,7 +105,7 @@ export default {
         }));
       });
       CSVStringify(rows, (err, csv) => {
-        this.download(csv, 'grouped.csv');
+        this.download(csv, filename, 'csv');
       });
     },
   },
@@ -102,6 +115,10 @@ export default {
 
     this.EventBus.$on('export-json', this.exportJson);
     this.EventBus.$on('export-csv', this.exportCsv);
+  },
+  beforeDestroy() {
+    this.EventBus.$off('export-json', this.exportJson);
+    this.EventBus.$off('export-csv', this.exportCsv);
   },
   components: {
     Droppable,

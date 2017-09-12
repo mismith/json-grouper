@@ -19,11 +19,11 @@
         <md-tooltip>Expand All</md-tooltip>
       </md-button>
 
-      <md-button @click.native="EventBus.$emit('export-json')" class="md-icon-button">
+      <md-button @click.native="EventBus.$emit('export-json', uploadedFilename)" class="md-icon-button">
         <md-icon>file_download</md-icon>
         <md-tooltip>Export JSON</md-tooltip>
       </md-button>
-      <md-button @click.native="EventBus.$emit('export-csv')" class="md-icon-button">
+      <md-button @click.native="EventBus.$emit('export-csv', uploadedFilename)" class="md-icon-button">
         <md-icon>file_download</md-icon>
         <md-tooltip>Export CSV</md-tooltip>
       </md-button>
@@ -43,11 +43,18 @@ export default {
   data() {
     return {
       data: undefined,
+      file: undefined,
     };
+  },
+  computed: {
+    uploadedFilename() {
+      return (this.file && this.file.name && this.file.name.replace(/\.\w+$/, '')) || undefined;
+    },
   },
   methods: {
     handleFileUpload(file) {
       this.data = undefined;
+      this.file = undefined;
 
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -61,6 +68,7 @@ export default {
             this.parseText(content);
             break;
         }
+        this.file = file;
       };
       reader.readAsText(file);
     },
