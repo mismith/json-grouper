@@ -1,10 +1,10 @@
 <template>
-  <droppable @drag-drop="$emit('drag-drop', $event)" v-if="!group || (group && data.length)" class="group" :class="{collapsable, collapsed}">
+  <droppable @drag-drop="$emit('drag-drop', $event)" v-if="!groupNum || (groupNum && data.length)" class="group" :class="{collapsable, collapsed}">
     <header>
       <div class="name">
-        <div v-if="!group">Ungrouped</div>
-        <md-input-container v-if="group">
-          <md-input :value="groupName" v-model="name" :placeholder="`Group ${group}`" @input="handleNameChange($event)" />
+        <div v-if="!groupNum">Ungrouped</div>
+        <md-input-container v-else>
+          <md-input :value="groupName" v-model="name" :placeholder="`Group ${groupNum}`" @input="handleNameChange($event)" />
         </md-input-container>
       </div>
       <div class="total" @click="collapsable && (collapsed = !collapsed)">{{ total() }}</div>
@@ -23,7 +23,7 @@ import Datum from './Datum';
 export default {
   name: 'group',
   props: {
-    group: {
+    groupNum: {
       type: Number,
     },
     data: {
@@ -53,7 +53,7 @@ export default {
       return this.data.reduce((votes, datum) => votes + datum.votes, 0);
     },
     handleNameChange(e) {
-      this.$emit('group-name-change', [this.name, this.group, e]);
+      this.$emit('group-name-change', [this.name, this.groupNum, e]);
     },
   },
   mounted() {

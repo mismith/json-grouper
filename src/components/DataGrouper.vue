@@ -3,7 +3,7 @@
     <group :data="grouped()" :collapsable="false" @drag-drop="handleMove($event)" />
     <droppable class="groups" @drag-drop="handleMove($event, null)">
       <div>
-        <group v-for="group in groupNumsSortedByTotal" :key="group" :group="group" :data="grouped(group)" :group-name="groupNames[group]" @group-name-change="handleGroupNameChange($event)" @drag-drop="handleMove($event, group)" />
+        <group v-for="groupNum in groupNumsSortedByTotal" :key="groupNum" :group-num="groupNum" :data="grouped(groupNum)" :group-name="groupNames[groupNum]" @group-name-change="handleGroupNameChange($event)" @drag-drop="handleMove($event, groupNum)" />
       </div>
     </droppable>
   </div>
