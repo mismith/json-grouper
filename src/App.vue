@@ -15,6 +15,9 @@
         <md-icon>file_download</md-icon>
         <md-tooltip>Export JSON</md-tooltip>
       </md-button>
+      <md-button @click.native="EventBus.$emit('export-csv')" class="md-icon-button">
+        <md-icon>file_download</md-icon>
+        <md-tooltip>Export CSV</md-tooltip>
       </md-button>
     </md-toolbar>
     <data-grouper v-if="data" :initial-data="data" />

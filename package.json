@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "csv-stringify": "^1.0.4",
     "node-sass": "^4.5.1",
     "sass-loader": "^6.0.3",
     "vue": "^2.2.2",

@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import CSVStringify from 'csv-stringify';
 import Droppable from './Droppable';
 import Group from './Group';
 
@@ -76,6 +77,23 @@ export default {
 
       this.download(json, 'grouped.json');
     },
+    exportCsv() {
+      const groups = [];
+      this.groupNumsSortedByTotal.concat(undefined).forEach((groupNum) => {
+        groups.push(this.grouped(groupNum));
+      });
+      let rows = [];
+      groups.forEach((items) => { // eslint-disable-line arrow-body-style
+        rows = rows.concat(items.map((item) => { // eslint-disable-line arrow-body-style
+          return {
+            name: item.name,
+            groupName: this.groupNames[item.group],
+          };
+        }));
+      });
+      CSVStringify(rows, (err, csv) => {
+        this.download(csv, 'grouped.csv');
+      });
     },
   },
   mounted() {
@@ -83,6 +101,7 @@ export default {
     this.groupNames = this.initialData.groupNames || {};
 
     this.EventBus.$on('export-json', this.exportJson);
+    this.EventBus.$on('export-csv', this.exportCsv);
   },
   components: {
     Droppable,
