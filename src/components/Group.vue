@@ -80,8 +80,6 @@ export default {
   flex-shrink: 0;
   min-width: 100px;
   background-color: rgba(0,0,0,.1);
-  border: dashed 2px transparent;
-  border-radius: 10px;
   margin: 5px;
 
   > header {
@@ -105,7 +103,6 @@ export default {
     }
   }
   > div {
-    padding: 10px;
     overflow: auto;
   }
   &.collapsable {
@@ -124,7 +121,7 @@ export default {
     }
   }
   &.dragover {
-    border-color: rgba(0,0,0,.5);
+    box-shadow: 0 0 1px 2px #3f51b5;
   }
 }
 .md-input-container {
