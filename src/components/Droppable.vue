@@ -1,9 +1,11 @@
 <template>
   <div
-    :class="{droppable: true, dragover}"
+    ref="droppable"
+    class="droppable"
+    :class="{dragover}"
     @drop.stop="dragover = false; $emit('drag-drop', getData($event))"
-    @dragover.prevent="dragover = true; $emit('drag-over', getData($event))"
-    @dragenter="dragover = true; $emit('drag-enter', getData($event))"
+    @dragover.prevent.stop="checkBubbling($event)"
+    @dragenter.stop="checkBubbling($event, 'drag-enter')"
     @dragleave="dragover = false; $emit('drag-leave', getData($event))"
   >
     <slot />
@@ -19,6 +21,18 @@ export default {
     };
   },
   methods: {
+    checkBubbling(e, type = 'drag-over') {
+      // bubble up until we find a droppable parent
+      let el = e.target;
+      while (el && !el.classList.contains('droppable')) {
+        el = el.parentElement;
+      }
+      // only enable dragover if no 'droppable' parents found
+      if (el) {
+        this.dragover = true;
+        this.$emit(type, this.getData(e));
+      }
+    },
     getData(e) {
       const json = e.dataTransfer.getData('application/json') || '';
 

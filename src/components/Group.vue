@@ -120,9 +120,6 @@ export default {
       }
     }
   }
-  &.dragover {
-    box-shadow: 0 0 1px 2px #3f51b5;
-  }
 }
 .md-input-container {
   min-height: 0;

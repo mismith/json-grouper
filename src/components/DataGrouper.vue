@@ -127,7 +127,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .data-grouper {
   display: flex;
   flex-grow: 1;
@@ -135,12 +135,14 @@ export default {
   > .group {
     width: 25%;
     margin: 10px;
+    margin-right: 0;
   }
   > .groups {
     width: 75%;
-    padding: 5px 5px 5px 0;
+    padding: 5px;
   }
 }
+
 .groups {
   display: flex;
   align-items: flex-start;
@@ -150,12 +152,48 @@ export default {
     display: flex;
     align-items: flex-start;
     flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+    height: 100%;
 
     .group {
       min-width: 300px;
       max-width: calc(25% - 10px);
       max-height: calc(50vh - 10px);
     }
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      background: #ccc;
+      opacity: 0;
+      pointer-events: none;
+    }
+    &:before {
+      height: 20px;
+      margin-left: -40px;
+    }
+    &:after {
+      width: 20px;
+      margin-top: -40px;
+    }
   }
+  &.dragover {
+    > div {
+      &:before,
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.groups.dragover > div,
+.group.dragover {
+  box-shadow: 0 0 1px 2px #3f51b5;
 }
 </style>
