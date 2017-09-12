@@ -18,7 +18,7 @@ export default {
   props: {
     initialData: {
       type: Object,
-      default: {},
+      default: () => ({}),
     },
   },
   data() {
@@ -33,10 +33,11 @@ export default {
     },
     groupNumsSortedByTotal() {
       const groupNums = [];
-      for (let group = 1; group < this.numGroups; group += 1) {
+      for (let group = 1; group <= this.numGroups; group += 1) {
         groupNums.push({
           group,
-          total: this.grouped(group || undefined).reduce((votes, datum) => votes + datum.votes, 0),
+          total: this.grouped(group || undefined)
+            .reduce((votes, datum) => (votes + datum.votes), 0),
         });
       }
       return groupNums.sort((a, b) => (a.total - b.total) || (a.group - b.group))
@@ -52,10 +53,7 @@ export default {
         const i = this.data.findIndex(d => d.name === datumName);
 
         if (i >= 0) {
-          const d = this.data[i];
-          d.group = group === null ? (this.numGroups + 1) : group;
-
-          this.data.splice(i, 1, d);
+          this.$set(this.data[i], 'group', group === null ? (this.numGroups + 1) : group);
         }
       }
     },

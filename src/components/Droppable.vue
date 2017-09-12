@@ -1,7 +1,6 @@
 <template>
   <div
     :class="{droppable: true, dragover}"
-    ref="droppable"
     @drop.stop="dragover = false; $emit('drag-drop', getData($event))"
     @dragover.prevent="dragover = true; $emit('drag-over', getData($event))"
     @dragenter="dragover = true; $emit('drag-enter', getData($event))"

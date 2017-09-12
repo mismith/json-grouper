@@ -16,7 +16,7 @@
         <md-tooltip>Download</md-tooltip>
       </md-button>
     </md-toolbar>
-    <data-grouper :initial-data="data" />
+    <data-grouper v-if="data" :initial-data="data" />
   </div>
 </template>
 
