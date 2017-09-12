@@ -1,0 +1,24 @@
+{
+  "groupNames": {
+    "1": "The First Group"
+  },
+  "data": [
+    {
+      "$id": 1,
+      "name": "Item 1",
+      "votes": 1,
+      "group": 1
+    },
+    {
+      "$id": 2,
+      "name": "Item 2",
+      "votes": 2
+    },
+    {
+      "$id": 3,
+      "name": "Item 3",
+      "votes": 0,
+      "group": 1
+    }
+  ]
+}
