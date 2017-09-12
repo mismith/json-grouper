@@ -45,7 +45,9 @@ export default {
   },
   computed: {
     sortedData() {
-      return this.data.sort((a, b) => (a.votes - b.votes) || (a.group - b.group)).reverse();
+      return this.data.sort((a, b) => (b.votes - a.votes)
+        || (b.group - a.group)
+        || (a.name || '').localeCompare(b.name || ''));
     },
   },
   methods: {
