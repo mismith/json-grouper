@@ -29,6 +29,9 @@
       </md-button>
     </md-toolbar>
     <data-grouper v-if="data" :initial-data="data" />
+    <aside v-else>
+      <div>No data loaded.</div>
+    </aside>
   </div>
 </template>
 
@@ -125,6 +128,13 @@ body,
 #app {
   display: flex;
   flex-direction: column;
+
+  > aside {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+  }
 }
 
 .file-upload-button {
