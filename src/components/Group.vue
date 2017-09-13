@@ -1,6 +1,6 @@
 <template>
   <droppable @drag-drop="$emit('drag-drop', $event)" v-if="!groupNum || (groupNum && data.length)" class="group" :class="{collapsable, collapsed}">
-    <header>
+    <header :style="{backgroundColor: getGroupColor(groupNum)}">
       <div class="name">
         <div v-if="!groupNum">Ungrouped</div>
         <md-input-container v-else>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import RandomColor from 'randomcolor';
 import Droppable from './Droppable';
 import Datum from './Datum';
 
@@ -51,6 +52,12 @@ export default {
     },
   },
   methods: {
+    getGroupColor(groupNum) {
+      return groupNum && RandomColor({
+        luminosity: 'light',
+        seed: groupNum * groupNum,
+      });
+    },
     total() {
       return this.data.reduce((votes, datum) => votes + datum.votes, 0);
     },
