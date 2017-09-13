@@ -89,11 +89,14 @@ export default {
       const data = [];
       const lines = text.replace(/^\s+|\s+$/ig, '').split('\n');
       lines.forEach((line, i) => {
-        data.push({
-          $id: i,
-          name: line.replace(/^\s+|\s+$/ig, ''),
-          votes: 1,
-        });
+        const value = line.replace(/^\s+|\s+$/ig, '');
+        if (value !== '') { // skip empty lines
+          data.push({
+            $id: i,
+            name: value,
+            votes: 1,
+          });
+        }
       });
       this.data = {
         data,
