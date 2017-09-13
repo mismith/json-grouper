@@ -2,13 +2,25 @@
   <div id="app">
     <md-toolbar class="md-dense">
       <h1 class="md-title">List Grouper</h1>
-      <span style="flex-grow: 1"></span>
+
+      <span style="flex-grow: 1;"></span>
 
       <md-button class="md-icon-button file-upload-button">
         <md-icon>file_upload</md-icon>
         <input type="file" accept="text/plain,application/json" @change="handleFileUpload($event.target.files[0])" @drop="handleFileUpload($event.dataTransfer.files[0])" />
         <md-tooltip>Upload File</md-tooltip>
       </md-button>
+
+      <md-button @click.native="EventBus.$emit('export-json', uploadedFilename)" class="md-icon-button">
+        <md-icon>file_download</md-icon>
+        <md-tooltip>Download JSON</md-tooltip>
+      </md-button>
+      <md-button @click.native="EventBus.$emit('export-csv', uploadedFilename)" class="md-icon-button">
+        <md-icon>file_download</md-icon>
+        <md-tooltip>Download CSV</md-tooltip>
+      </md-button>
+      
+      <span style="flex-grow: 1;"></span>
 
       <md-button @click.native="EventBus.$emit('group.collapseAll')" class="md-icon-button">
         <md-icon>remove_circle</md-icon>
@@ -17,15 +29,6 @@
       <md-button @click.native="EventBus.$emit('group.expandAll')" class="md-icon-button">
         <md-icon>add_circle</md-icon>
         <md-tooltip>Expand All</md-tooltip>
-      </md-button>
-
-      <md-button @click.native="EventBus.$emit('export-json', uploadedFilename)" class="md-icon-button">
-        <md-icon>file_download</md-icon>
-        <md-tooltip>Export JSON</md-tooltip>
-      </md-button>
-      <md-button @click.native="EventBus.$emit('export-csv', uploadedFilename)" class="md-icon-button">
-        <md-icon>file_download</md-icon>
-        <md-tooltip>Export CSV</md-tooltip>
       </md-button>
     </md-toolbar>
     <data-grouper v-if="data" :initial-data="data" />
