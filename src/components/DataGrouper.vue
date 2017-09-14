@@ -216,6 +216,7 @@ export default {
     }
     &:before,
     &:after {
+      display: none;
       content: '';
       position: absolute;
       top: 50%;
@@ -223,7 +224,6 @@ export default {
       width: 100px;
       height: 100px;
       background: #ccc;
-      opacity: 0;
       pointer-events: none;
     }
     &:before {
@@ -239,7 +239,7 @@ export default {
     > div {
       &:before,
       &:after {
-        opacity: 1;
+        display: block;
       }
     }
   }
