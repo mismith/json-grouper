@@ -2,10 +2,8 @@
   <div class="data-grouper" :class="{'bar-mode': barMode}">
     <group
       :data="grouped()"
-      :collapsable="false"
       @collapse="handleCollapseAll()"
       @drag-drop="handleMove($event)"
-      class="collapsable"
       :class="{collapsed: collapseAll}"
     >
       <md-button slot="header" @click.native="barMode = !barMode" class="md-icon-button md-raised barMode" :class="{'md-accent': barMode}">
@@ -163,9 +161,13 @@ export default {
   flex-grow: 1;
 
   > .group {
-    width: 25%;
+    width: 25% !important;
     margin: 10px;
     margin-right: 0;
+
+    > div {
+      display: block !important;
+    }
   }
   > .groups {
     width: 75%;

@@ -14,9 +14,11 @@
         </md-input-container>
       </div>
       <slot name="header" />
-      <md-button class="md-icon-button total" @click.native="collapse($event)">{{ totalVotes }}</md-button>
+      <md-button class="md-icon-button total" :disabled="!collapsable" @click.native="handleCollapse($event)">
+        {{ totalVotes }}
+      </md-button>
     </header>
-    <div v-if="!collapsed">
+    <div v-show="!collapsed">
       <datum v-for="datum in sortedData" :key="datum.name" :datum="datum" />
     </div>
     <slot />
@@ -68,7 +70,7 @@ export default {
         seed: groupNum * groupNum,
       });
     },
-    collapse(event) {
+    handleCollapse(event) {
       if (this.collapsable) {
         this.collapsed = !this.collapsed;
       }
