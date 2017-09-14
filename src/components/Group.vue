@@ -1,5 +1,11 @@
 <template>
-  <droppable @drag-drop="$emit('drag-drop', $event)" v-if="!groupNum || (groupNum && data.length)" class="group" :class="{collapsable, collapsed}">
+  <droppable
+    v-if="!groupNum || (groupNum && data.length)"
+    @drag-drop="$emit('drag-drop', $event)"
+    class="group"
+    :class="{collapsable, collapsed}"
+    :style="{width: collapsable ? `${totalVotes}%` : ''}"
+  >
     <header :style="{backgroundColor: getGroupColor(groupNum)}">
       <div class="name">
         <div v-if="!groupNum">Ungrouped</div>
@@ -7,7 +13,8 @@
           <md-input :value="groupName" v-model="name" :placeholder="`Group ${groupNum}`" @input="handleNameChange($event)" />
         </md-input-container>
       </div>
-      <md-button class="md-icon-button total" @click.native="collapse($event)">{{ total() }}</md-button>
+      <slot name="header" />
+      <md-button class="md-icon-button total" @click.native="collapse($event)">{{ totalVotes }}</md-button>
     </header>
     <div v-if="!collapsed">
       <datum v-for="datum in sortedData" :key="datum.name" :datum="datum" />
@@ -50,6 +57,9 @@ export default {
         || (b.group - a.group)
         || (a.name || '').localeCompare(b.name || ''));
     },
+    totalVotes() {
+      return this.data.reduce((votes, datum) => votes + datum.votes, 0);
+    },
   },
   methods: {
     getGroupColor(groupNum) {
@@ -63,9 +73,6 @@ export default {
         this.collapsed = !this.collapsed;
       }
       this.$emit('collapse', event);
-    },
-    total() {
-      return this.data.reduce((votes, datum) => votes + datum.votes, 0);
     },
     handleNameChange(e) {
       this.$emit('group-name-change', [this.name, this.groupNum, e]);

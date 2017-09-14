@@ -1,5 +1,5 @@
 <template>
-  <div class="data-grouper">
+  <div class="data-grouper" :class="{'bar-mode': barMode}">
     <group
       :data="grouped()"
       :collapsable="false"
@@ -7,7 +7,12 @@
       @drag-drop="handleMove($event)"
       class="collapsable"
       :class="{collapsed: collapseAll}"
-    />
+    >
+      <md-button slot="header" @click.native="barMode = !barMode" class="md-icon-button md-raised barMode" :class="{'md-accent': barMode}">
+        <md-icon>short_text</md-icon>
+        <md-tooltip>Toggle bar mode</md-tooltip>
+      </md-button>
+    </group>
     <droppable class="groups" @drag-drop="handleMove($event, null)">
       <div>
         <group
@@ -42,6 +47,7 @@ export default {
       data: [],
       groupNames: {},
       collapseAll: false,
+      barMode: false,
     };
   },
   computed: {
@@ -164,6 +170,29 @@ export default {
   > .groups {
     width: 75%;
     padding: 5px;
+  }
+  &.bar-mode {
+    > .groups {
+      > div {
+        flex-direction: column;
+        flex-wrap: nowrap;
+
+        .group {
+          flex-grow: attr(data-votes integer, 1);
+          min-width: 0;
+          max-width: none;
+
+          > header {
+            .name {
+              flex-shrink: 0;
+            }
+          }
+          > div {
+            display: none;
+          }
+        }
+      }
+    }
   }
 }
 
