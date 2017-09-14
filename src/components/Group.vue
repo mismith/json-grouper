@@ -16,6 +16,7 @@
       <slot name="header" />
       <md-button class="md-icon-button total" :disabled="!collapsable" @click.native="handleCollapse($event)">
         {{ totalVotes }}
+        <md-tooltip v-if="tooltip">{{ tooltip }}</md-tooltip>
       </md-button>
     </header>
     <div v-show="!collapsed">
@@ -45,6 +46,12 @@ export default {
     collapsable: {
       type: Boolean,
       default: true,
+    },
+    tooltip: {
+      type: String,
+      default() {
+        return this.collapsable ? 'Expand/Collapse' : '';
+      },
     },
   },
   data() {

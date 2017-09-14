@@ -2,13 +2,14 @@
   <div class="data-grouper" :class="{'bar-mode': barMode}">
     <group
       :data="grouped()"
+      tooltip="Expand/Collapse All"
       @collapse="handleCollapseAll()"
       @drag-drop="handleMove($event)"
       :class="{collapsed: collapseAll}"
     >
       <md-button slot="header" @click.native="barMode = !barMode" class="md-icon-button md-raised barMode" :class="{'md-accent': barMode}">
         <md-icon>short_text</md-icon>
-        <md-tooltip>Toggle bar mode</md-tooltip>
+        <md-tooltip>Toggle Bar Mode</md-tooltip>
       </md-button>
     </group>
     <droppable class="groups" @drag-drop="handleMove($event, null)">

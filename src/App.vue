@@ -8,7 +8,7 @@
       <md-button class="md-icon-button file-upload-button">
         <md-icon>file_upload</md-icon>
         <input type="file" accept="text/plain,application/json" @change="handleFileUpload($event.target.files[0])" @drop="handleFileUpload($event.dataTransfer.files[0])" />
-        <md-tooltip>Upload File</md-tooltip>
+        <md-tooltip>Upload</md-tooltip>
       </md-button>
 
       <md-menu md-size="3">
