@@ -27,18 +27,11 @@
           </md-menu-item>
         </md-menu-content>
       </md-menu>
-      
+
       <span style="flex-grow: 1;"></span>
 
-      <md-button @click.native="EventBus.$emit('group.collapseAll')" class="md-icon-button">
-        <md-icon>remove_circle</md-icon>
-        <md-tooltip>Collapse All</md-tooltip>
-      </md-button>
-      <md-button @click.native="EventBus.$emit('group.expandAll')" class="md-icon-button">
-        <md-icon>add_circle</md-icon>
-        <md-tooltip>Expand All</md-tooltip>
-      </md-button>
     </md-toolbar>
+
     <data-grouper v-if="data" :initial-data="data" />
     <aside v-else>
       <div>No data loaded.</div>

@@ -7,7 +7,7 @@
           <md-input :value="groupName" v-model="name" :placeholder="`Group ${groupNum}`" @input="handleNameChange($event)" />
         </md-input-container>
       </div>
-      <div class="total" @click="collapsable && (collapsed = !collapsed)">{{ total() }}</div>
+      <md-button class="md-icon-button total" @click.native="collapse($event)">{{ total() }}</md-button>
     </header>
     <div v-if="!collapsed">
       <datum v-for="datum in sortedData" :key="datum.name" :datum="datum" />
@@ -58,6 +58,12 @@ export default {
         seed: groupNum * groupNum,
       });
     },
+    collapse(event) {
+      if (this.collapsable) {
+        this.collapsed = !this.collapsed;
+      }
+      this.$emit('collapse', event);
+    },
     total() {
       return this.data.reduce((votes, datum) => votes + datum.votes, 0);
     },
@@ -103,10 +109,12 @@ export default {
     .total {
       min-height: 3em;
       min-width: 3em;
-      line-height: 3em;
-      background-color: rgba(0,0,0,.1);
+      background-color: rgba(0,0,0,.2);
       text-align: center;
-      border-radius: 50%;
+
+      &:hover {
+        background-color: rgba(0,0,0,.1) !important;
+      }
     }
   }
   > div {
@@ -123,6 +131,10 @@ export default {
         .total {
           background-color: rgba(0,0,0,.5);
           color: rgba(255,255,255,1);
+
+          &:hover {
+            background-color: rgba(0,0,0,.4) !important;
+          }
         }
       }
     }

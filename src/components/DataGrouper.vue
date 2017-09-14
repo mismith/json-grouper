@@ -1,6 +1,13 @@
 <template>
   <div class="data-grouper">
-    <group :data="grouped()" :collapsable="false" @drag-drop="handleMove($event)" />
+    <group
+      :data="grouped()"
+      :collapsable="false"
+      @collapse="handleCollapseAll()"
+      @drag-drop="handleMove($event)"
+      class="collapsable"
+      :class="{collapsed: collapseAll}"
+    />
     <droppable class="groups" @drag-drop="handleMove($event, null)">
       <div>
         <group
@@ -34,6 +41,7 @@ export default {
     return {
       data: [],
       groupNames: {},
+      collapseAll: false,
     };
   },
   computed: {
@@ -68,6 +76,14 @@ export default {
     },
     handleGroupNameChange([name, group]) {
       this.groupNames[group] = name || undefined;
+    },
+    handleCollapseAll() {
+      if (this.collapseAll) {
+        this.EventBus.$emit('group.expandAll');
+      } else {
+        this.EventBus.$emit('group.collapseAll');
+      }
+      this.collapseAll = !this.collapseAll;
     },
 
     download(contents, filename = 'grouped', extension = 'txt') {
