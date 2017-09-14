@@ -11,14 +11,22 @@
         <md-tooltip>Upload File</md-tooltip>
       </md-button>
 
-      <md-button @click.native="EventBus.$emit('export-json', uploadedFilename)" class="md-icon-button">
-        <md-icon>file_download</md-icon>
-        <md-tooltip>Download JSON</md-tooltip>
-      </md-button>
-      <md-button @click.native="EventBus.$emit('export-csv', uploadedFilename)" class="md-icon-button">
-        <md-icon>file_download</md-icon>
-        <md-tooltip>Download CSV</md-tooltip>
-      </md-button>
+      <md-menu md-size="3">
+        <md-button class="md-icon-button" md-menu-trigger>
+          <md-icon>file_download</md-icon>
+          <md-tooltip>Download...</md-tooltip>
+        </md-button>
+        <md-menu-content>
+          <md-menu-item @click.native="EventBus.$emit('export-json', uploadedFilename)">
+            <md-icon>file_download</md-icon>
+            <span>JSON</span>
+          </md-menu-item>
+          <md-menu-item @click.native="EventBus.$emit('export-csv', uploadedFilename)">
+            <md-icon>file_download</md-icon>
+            <span>CSV</span>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
       
       <span style="flex-grow: 1;"></span>
 
