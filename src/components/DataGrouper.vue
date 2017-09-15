@@ -163,7 +163,7 @@ export default {
 
   > .group {
     width: 25% !important;
-    margin: 10px;
+    margin: 8px;
     margin-right: 0;
 
     > div {
@@ -172,7 +172,7 @@ export default {
   }
   > .groups {
     width: 75%;
-    padding: 5px;
+    padding: 4px;
   }
   &.bar-mode {
     > .groups {
@@ -214,8 +214,8 @@ export default {
 
     .group {
       min-width: 300px;
-      max-width: calc(25% - 10px);
-      max-height: calc(50vh - 10px);
+      max-width: calc(25% - 8px);
+      max-height: calc(50vh - 8px);
     }
     &:before,
     &:after {

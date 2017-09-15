@@ -109,16 +109,16 @@ export default {
   flex-shrink: 0;
   min-width: 100px;
   background-color: rgba(0,0,0,.1);
-  margin: 5px;
+  margin: 4px;
 
   > header {
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    padding: 10px;
+    padding: 8px;
 
     .name {
-      padding: 0 10px;
+      padding: 0 8px;
       font-size: 16px;
       flex-grow: 1;
     }
