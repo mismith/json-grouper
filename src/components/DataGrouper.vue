@@ -35,7 +35,7 @@ import Group from './Group';
 export default {
   name: 'data-grouper',
   props: {
-    initialData: {
+    initialList: {
       type: Object,
       default: () => ({}),
     },
@@ -92,14 +92,15 @@ export default {
 
     bundleJson() {
       return {
+        ...this.initialList,
         groupNames: this.groupNames,
         data: this.data,
       };
     },
   },
   mounted() {
-    this.data = this.initialData.data || [];
-    this.groupNames = this.initialData.groupNames || {};
+    this.data = this.initialList.data || [];
+    this.groupNames = this.initialList.groupNames || {};
   },
   components: {
     Droppable,

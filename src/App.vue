@@ -32,7 +32,7 @@
       </div>
     </md-toolbar>
 
-    <data-grouper v-if="data" ref="dataGrouper" :initial-data="data" />
+    <data-grouper v-if="data" ref="dataGrouper" :initial-list="data" />
     <aside v-else>
       <div>No data loaded.</div>
     </aside>
