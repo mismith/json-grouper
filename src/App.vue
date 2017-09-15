@@ -34,7 +34,7 @@
       </div>
     </md-toolbar>
 
-    <data-grouper v-if="data" ref="dataGrouper" :initial-list="data" />
+    <data-grouper v-if="list.data" ref="dataGrouper" :initial-list="list" />
     <aside v-else>
       <div>No data loaded.</div>
     </aside>
@@ -49,8 +49,9 @@ export default {
   name: 'app',
   data() {
     return {
-      data: undefined,
       file: undefined,
+      list: {
+      },
       loading: {
         upload: false,
         download: false,
@@ -65,8 +66,8 @@ export default {
   methods: {
     // import
     handleFileUpload(file) {
-      this.data = undefined;
       this.loading.upload = true;
+      this.list.data = undefined;
       this.file = undefined;
 
       // since this seems to lock the browser, make sure the loading icon is showing first
@@ -112,20 +113,14 @@ export default {
           });
         }
       });
-      this.data = {
-        data,
-      };
+      this.list.data = data;
     },
     parseJson(json) {
-      let data = {};
       if (json.data) {
-        data = json;
+        this.list = json;
       } else {
-        data = {
-          data: json,
-        };
+        this.list.data = json;
       }
-      this.data = data;
     },
 
     loadText(url) {
