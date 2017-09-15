@@ -20,7 +20,7 @@
       </md-button>
     </header>
     <div v-show="!collapsed">
-      <datum v-for="datum in sortedData" :key="datum.name" :datum="datum" />
+      <datum v-for="datum in sortedData" :key="datum.key" :datum="datum" />
     </div>
     <slot />
   </droppable>
@@ -64,7 +64,7 @@ export default {
     sortedData() {
       return this.data.sort((a, b) => (b.votes - a.votes)
         || (b.group - a.group)
-        || (a.name || '').localeCompare(b.name || ''));
+        || (a.value || '').localeCompare(b.value || ''));
     },
     totalVotes() {
       return this.data.reduce((votes, datum) => votes + datum.votes, 0);

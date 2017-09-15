@@ -1,7 +1,7 @@
 <template>
   <draggable :drag-data="datum" class="datum">
     <header>
-      <div class="name">{{ datum.name }}</div>
+      <div class="value">{{ datum.value }}</div>
       <div class="total">{{ datum.votes }}</div>
     </header>
   </draggable>
@@ -34,7 +34,7 @@ export default {
     align-items: flex-start;
     flex-shrink: 0;
 
-    .name {
+    .value {
       flex-grow: 1;
       padding-right: 10px;
     }

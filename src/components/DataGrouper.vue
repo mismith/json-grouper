@@ -61,8 +61,9 @@ export default {
             .reduce((votes, datum) => (votes + datum.votes), 0),
         });
       }
-      return groupNums.sort((a, b) => (a.total - b.total) || (a.group - b.group))
-        .reverse().map(groupNum => groupNum.group);
+      return groupNums
+        .sort((a, b) => (b.total - a.total) || (b.group - a.group))
+        .map(groupNum => groupNum.group);
     },
   },
   methods: {
@@ -71,10 +72,10 @@ export default {
     },
     handleMove([datum], group = undefined) {
       if (this.data) {
-        const i = this.data.findIndex(d => d.$id === datum.$id);
+        const index = this.data.findIndex(d => d.key === datum.key);
 
-        if (i >= 0) {
-          this.$set(this.data[i], 'group', group === null ? (this.numGroups + 1) : group);
+        if (index >= 0) {
+          this.$set(this.data[index], 'group', group === null ? (this.numGroups + 1) : group);
         }
       }
     },

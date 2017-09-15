@@ -4,20 +4,38 @@
   },
   "data": [
     {
-      "$id": 1,
-      "name": "Item 1",
+      "key": 1,
+      "value": "Item 1",
       "votes": 1,
       "group": 1
     },
     {
-      "$id": 2,
-      "name": "Item 2",
+      "key": 2,
+      "value": "Item 2",
       "votes": 2
     },
     {
-      "$id": 3,
-      "name": "Item 3",
+      "key": 3,
+      "value": "Item 3",
       "votes": 0,
+      "group": 1
+    },
+    {
+      "key": 4,
+      "value": "Item 4",
+      "votes": 0,
+      "group": 2
+    },
+    {
+      "key": 5,
+      "value": "Item 5",
+      "votes": 0,
+      "group": 2
+    },
+    {
+      "key": 6,
+      "value": "Item 6",
+      "votes": 4,
       "group": 1
     }
   ]

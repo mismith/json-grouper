@@ -107,8 +107,8 @@ export default {
         const value = line.replace(/^\s+|\s+$/ig, '');
         if (value !== '') { // skip empty lines
           data.push({
-            $id: i,
-            name: value,
+            key: i,
+            value,
             votes: 1,
           });
         }
