@@ -12,7 +12,7 @@
         <md-tooltip>Toggle Bar Mode</md-tooltip>
       </md-button>
     </group>
-    <droppable class="groups" @drag-drop="handleMove($event, null)">
+    <droppable class="groups" @drag-drop="handleMove($event, numGroups + 1)">
       <div>
         <group
           v-for="groupNum in groupNumsSortedByTotal"
@@ -67,15 +67,15 @@ export default {
     },
   },
   methods: {
-    grouped(group) {
-      return this.data.filter(d => d.group === group);
+    grouped(group = undefined) {
+      return this.data.filter(d => (d.group || 0) === (group || 0));
     },
     handleMove([datum], group = undefined) {
       if (this.data) {
         const index = this.data.findIndex(d => d.key === datum.key);
 
-        if (index >= 0) {
-          this.$set(this.data[index], 'group', group === null ? (this.numGroups + 1) : group);
+        if (index >= 0 && this.data[index] && ((this.data[index].group || 0) !== (group || 0))) {
+          this.$set(this.data[index], 'group', group || null);
         }
       }
     },
