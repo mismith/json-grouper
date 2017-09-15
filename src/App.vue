@@ -4,14 +4,15 @@
       <div>
         <h1 class="md-title" style="margin-right: auto;">List Grouper</h1>
 
-        <md-button class="md-icon-button file-upload-button">
+        <md-button v-if="!loading.upload" class="md-icon-button file-upload-button">
           <md-icon>file_upload</md-icon>
           <input type="file" accept="text/plain,application/json" @change="handleFileUpload($event.target.files[0])" @drop="handleFileUpload($event.dataTransfer.files[0])" />
           <md-tooltip>Upload</md-tooltip>
         </md-button>
+        <md-spinner v-else />
       </div>
       <div>
-        <md-menu md-size="3">
+        <md-menu v-if="!loading.download" md-size="3">
           <md-button class="md-icon-button" md-menu-trigger>
             <md-icon>file_download</md-icon>
             <md-tooltip>Download</md-tooltip>
@@ -27,6 +28,7 @@
             </md-menu-item>
           </md-menu-content>
         </md-menu>
+        <md-spinner v-else />
 
         <span style="flex-grow: 1;"></span>
       </div>
@@ -49,6 +51,10 @@ export default {
     return {
       data: undefined,
       file: undefined,
+      loading: {
+        upload: false,
+        download: false,
+      },
     };
   },
   computed: {
@@ -60,23 +66,28 @@ export default {
     // import
     handleFileUpload(file) {
       this.data = undefined;
+      this.loading.upload = true;
       this.file = undefined;
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target.result;
-        switch (file.type) {
-          case 'application/json':
-            this.parseJson(JSON.parse(content));
-            break;
-          case 'text/plain':
-          default:
-            this.parseText(content);
-            break;
-        }
-        this.file = file;
-      };
-      reader.readAsText(file);
+      // since this seems to lock the browser, make sure the loading icon is showing first
+      this.$nextTick(() => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          switch (file.type) {
+            case 'application/json':
+              this.parseJson(JSON.parse(content));
+              break;
+            case 'text/plain':
+            default:
+              this.parseText(content);
+              break;
+          }
+          this.file = file;
+          this.loading.upload = false;
+        };
+        reader.readAsText(file);
+      });
     },
 
     fetchText(url) {
@@ -147,23 +158,27 @@ export default {
       a.click();
     },
     exportJson(filename = undefined) {
+      this.loading.download = true;
       const jsonBundle = this.$refs.dataGrouper.bundleJson();
 
       const json = JSON.stringify(jsonBundle, null, 2);
 
       this.download(json, filename, 'json');
+      this.loading.download = false;
     },
     exportCsv(filename = undefined) {
+      this.loading.download = true;
       const jsonBundle = this.$refs.dataGrouper.bundleJson();
 
       const rows = jsonBundle.data.map(datum => ({
         ...datum,
-        group: jsonBundle.groupNames[datum.group],
+        group: jsonBundle.groupNames[datum.group], // turn the group number into the group name
       }));
       CSVStringify(rows, (err, csv) => {
         if (err) throw new Error(err);
 
         this.download(csv, filename, 'csv');
+        this.loading.download = false;
       });
     },
   },
