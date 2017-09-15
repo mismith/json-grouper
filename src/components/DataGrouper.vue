@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import CSVStringify from 'csv-stringify';
 import Droppable from './Droppable';
 import Group from './Group';
 
@@ -91,63 +90,16 @@ export default {
       this.collapseAll = !this.collapseAll;
     },
 
-    download(contents, filename = 'grouped', extension = 'txt') {
-      const a = document.createElement('a');
-      let mime;
-      switch (extension) {
-        case 'json':
-          mime = 'application/json';
-          break;
-        case 'csv':
-          mime = 'text/csv';
-          break;
-        case 'txt':
-        default:
-          mime = 'text/plain';
-          break;
-      }
-      a.setAttribute('href', `data:${mime};charset=utf-8,${encodeURIComponent(contents)}`);
-      a.setAttribute('download', `${filename}.${extension}`);
-      a.click();
-    },
-    exportJson(filename = undefined) {
-      const bundle = {
+    bundleJson() {
+      return {
         groupNames: this.groupNames,
         data: this.data,
       };
-      const json = JSON.stringify(bundle, null, 2);
-
-      this.download(json, filename, 'json');
-    },
-    exportCsv(filename = undefined) {
-      const groups = [];
-      this.groupNumsSortedByTotal.concat(undefined).forEach((groupNum) => {
-        groups.push(this.grouped(groupNum));
-      });
-      let rows = [];
-      groups.forEach((items) => { // eslint-disable-line arrow-body-style
-        rows = rows.concat(items.map((item) => { // eslint-disable-line arrow-body-style
-          return {
-            name: item.name,
-            groupName: this.groupNames[item.group],
-          };
-        }));
-      });
-      CSVStringify(rows, (err, csv) => {
-        this.download(csv, filename, 'csv');
-      });
     },
   },
   mounted() {
     this.data = this.initialData.data || [];
     this.groupNames = this.initialData.groupNames || {};
-
-    this.EventBus.$on('export-json', this.exportJson);
-    this.EventBus.$on('export-csv', this.exportCsv);
-  },
-  beforeDestroy() {
-    this.EventBus.$off('export-json', this.exportJson);
-    this.EventBus.$off('export-csv', this.exportCsv);
   },
   components: {
     Droppable,
