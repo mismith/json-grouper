@@ -35,6 +35,29 @@
         <md-spinner v-else />
 
         <span style="flex-grow: 1;"></span>
+
+        <div v-if="meLoaded">
+          <md-button v-if="!me" @click.native="login()" class="md-raised">
+            <img src="/static/google-logo.svg" alt="Google" width="20" style="margin-top: -1px; margin-left: -5px; margin-right: 5px;" /> Login
+          </md-button>
+          <div v-else>
+            <md-menu md-size="3">
+              <md-button md-menu-trigger class="md-icon-button" style="padding: 0;">
+                <md-avatar>
+                  <img :src="me.photoURL" role="presentation" />
+                  <md-tooltip>Account</md-tooltip>
+                </md-avatar>
+              </md-button>
+              <md-menu-content>
+                <md-menu-item @click.native="logout()">
+                  <md-icon>power_settings_new</md-icon>
+                  <span>Logout</span>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
+        </div>
+        <md-spinner v-else />
       </div>
     </md-toolbar>
 
@@ -47,10 +70,14 @@
 
 <script>
 import CSVStringify from 'csv-stringify';
+import FirebaseAuthMixin from '@/mixins/FirebaseAuth';
 import DataGrouper from './components/DataGrouper';
 
 export default {
   name: 'app',
+  mixins: [
+    FirebaseAuthMixin,
+  ],
   data() {
     return {
       file: undefined,
