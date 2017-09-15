@@ -12,6 +12,10 @@
         <md-spinner v-else />
       </div>
       <div>
+        <md-input-container md-inline>
+          <md-input v-model="list.name" placeholder="Untitled list" />
+        </md-input-container>
+
         <md-menu v-if="!loading.download" md-size="3">
           <md-button class="md-icon-button" md-menu-trigger>
             <md-icon>file_download</md-icon>
@@ -51,6 +55,7 @@ export default {
     return {
       file: undefined,
       list: {
+        name: undefined,
       },
       loading: {
         upload: false,
@@ -68,7 +73,7 @@ export default {
     handleFileUpload(file) {
       this.loading.upload = true;
       this.list.data = undefined;
-      this.file = undefined;
+      this.file = file;
 
       // since this seems to lock the browser, make sure the loading icon is showing first
       this.$nextTick(() => {
@@ -84,7 +89,6 @@ export default {
               this.parseText(content);
               break;
           }
-          this.file = file;
           this.loading.upload = false;
         };
         reader.readAsText(file);
@@ -114,12 +118,15 @@ export default {
         }
       });
       this.list.data = data;
+      this.list.name = this.uploadedFilename;
     },
     parseJson(json) {
       if (json.data) {
         this.list = json;
+        this.list.name = this.list.name || this.uploadedFilename;
       } else {
         this.list.data = json;
+        this.list.name = this.uploadedFilename;
       }
     },
 
@@ -221,6 +228,10 @@ body,
   }
   .md-title {
     white-space: nowrap;
+  }
+  .md-input-inline {
+    width: auto;
+    flex-grow: 1;
   }
 }
 
