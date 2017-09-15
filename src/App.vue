@@ -13,7 +13,7 @@
       </div>
       <div>
         <md-input-container md-inline>
-          <md-input v-model="list.name" placeholder="Untitled list" />
+          <md-input v-model="list.name" @change="dirty = true;" placeholder="Untitled list" />
         </md-input-container>
 
         <md-button v-if="!loading.save" @click.native="save()" class="md-icon-button" :class="{'md-raised md-accent': dirty}">
@@ -73,7 +73,12 @@
       </div>
     </md-toolbar>
 
-    <data-grouper v-if="list.data" ref="dataGrouper" :initial-list="list" />
+    <data-grouper
+      v-if="list.data"
+      ref="dataGrouper"
+      :initial-list="list"
+      @dirty="dirty = true;"
+    />
     <aside v-else>
       <div>No data loaded.</div>
     </aside>
@@ -111,6 +116,7 @@ export default {
         name: undefined,
       },
       listId: undefined,
+      dirty: false,
       loading: {
         upload: false,
         download: false,

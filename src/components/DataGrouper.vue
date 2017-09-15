@@ -76,11 +76,15 @@ export default {
 
         if (index >= 0 && this.data[index] && ((this.data[index].group || 0) !== (group || 0))) {
           this.$set(this.data[index], 'group', group || null);
+
+          this.$emit('dirty');
         }
       }
     },
     handleGroupNameChange([name, group]) {
       this.groupNames[group] = name || undefined;
+
+      this.$emit('dirty');
     },
     handleCollapseAll() {
       if (this.collapseAll) {
