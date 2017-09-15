@@ -16,6 +16,18 @@
           <md-input v-model="list.name" placeholder="Untitled list" />
         </md-input-container>
 
+        <md-button v-if="!loading.save" @click.native="save()" class="md-icon-button" :class="{'md-raised md-accent': dirty}">
+          <md-icon>call_merge</md-icon>
+          <md-tooltip>Save</md-tooltip>
+        </md-button>
+        <md-spinner v-else />
+
+        <md-button v-if="!loading.duplicate" @click.native="save(true)" class="md-icon-button">
+          <md-icon>call_split</md-icon>
+          <md-tooltip>Duplicate</md-tooltip>
+        </md-button>
+        <md-spinner v-else />
+
         <md-menu v-if="!loading.download" md-size="3">
           <md-button class="md-icon-button" md-menu-trigger>
             <md-icon>file_download</md-icon>
@@ -65,12 +77,26 @@
     <aside v-else>
       <div>No data loaded.</div>
     </aside>
+
+    <md-dialog-confirm
+      ref="loginConfirm"
+      md-content-html="You need to login first."
+      md-ok-text="Login"
+      md-cancel-text="Cancel"
+    />
+    <md-snackbar ref="snackbar" md-position="bottom right" @click.native="$refs.snackbar.close()">
+      Saved!
+    </md-snackbar>
   </div>
 </template>
 
 <script>
 import CSVStringify from 'csv-stringify';
 import FirebaseAuthMixin from '@/mixins/FirebaseAuth';
+import {
+  idKey,
+  db,
+} from '@/helpers/firebase';
 import DataGrouper from './components/DataGrouper';
 
 export default {
@@ -84,9 +110,12 @@ export default {
       list: {
         name: undefined,
       },
+      listId: undefined,
       loading: {
         upload: false,
         download: false,
+        save: false,
+        duplicate: false,
       },
     };
   },
@@ -201,7 +230,8 @@ export default {
 
       const rows = jsonBundle.data.map(datum => ({
         ...datum,
-        group: jsonBundle.groupNames[datum.group], // turn the group number into the group name
+        // turn the group number into the group name
+        group: jsonBundle.groupNames[datum.group],
       }));
       CSVStringify(rows, (err, csv) => {
         if (err) throw new Error(err);
@@ -209,6 +239,74 @@ export default {
         this.download(csv, filename, 'csv');
         this.loading.download = false;
       });
+    },
+
+    // CRUD
+    loginIfNecessary() {
+      if (!this.me) {
+        return new Promise((resolve, reject) => {
+          this.$refs.loginConfirm.open();
+          this.$refs.loginConfirm.$on('close', (state) => {
+            if (state === 'ok') return resolve();
+            return reject('User cancelled');
+          });
+        })
+          .then(this.login)
+          .then(() => new Promise((resolve) => {
+            // ensure `me` is ready before proceeding
+            const unwatch = this.$watch('me', (me) => {
+              if (me) {
+                resolve(this.me);
+                unwatch();
+              }
+            });
+          }));
+      }
+      return Promise.resolve();
+    },
+    save(asDuplicate = false) {
+      const doLoading = (status) => {
+        if (asDuplicate) {
+          this.loading.duplicate = status;
+        } else {
+          this.loading.save = status;
+        }
+      };
+      doLoading(true);
+
+      this.loginIfNecessary()
+        .then(() => {
+          if (!this.me || !this.me[idKey]) throw new Error('You need to be logged in.');
+
+          const bundle = this.$refs.dataGrouper.bundleJson();
+          const myListsRef = db.child(`users:lists/${this.me[idKey]}`);
+
+          // save to firebase
+          if (this.listId && !asDuplicate) {
+            // update
+            const listRef = myListsRef.child(this.listId);
+            return listRef.set({
+              ...bundle,
+            })
+              .then(() => listRef); // pass on the reference
+          }
+          // create
+          return myListsRef.push({
+            ...bundle,
+          });
+        })
+        .then((ref) => {
+          this.listId = ref.key;
+          this.$refs.snackbar.open();
+
+          doLoading(false);
+          this.dirty = false;
+        })
+        .catch((err) => {
+          console.error(err); // eslint-disable-line no-console
+
+          doLoading(false);
+        });
     },
   },
   created() {
