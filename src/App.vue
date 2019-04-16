@@ -4,6 +4,11 @@
       <div>
         <h1 class="md-title" style="margin-right: auto;">List Grouper</h1>
 
+        <!--<md-button @click.native="createList()" class="md-icon-button">
+          <md-icon>add_circle_outline</md-icon>
+          <md-tooltip>New list</md-tooltip>
+        </md-button>-->
+
         <md-button v-if="!loading.upload" class="md-icon-button file-upload-button">
           <md-icon>file_upload</md-icon>
           <input type="file" accept="text/plain,application/json" @change="handleFileUpload($event.target.files[0])" @drop="handleFileUpload($event.dataTransfer.files[0])" />
@@ -96,6 +101,7 @@
 </template>
 
 <script>
+// import moment from 'moment-mini';
 import CSVStringify from 'csv-stringify';
 import FirebaseAuthMixin from '@/mixins/FirebaseAuth';
 import {
@@ -293,11 +299,13 @@ export default {
             const listRef = myListsRef.child(this.listId);
             return listRef.set({
               ...bundle,
+              // _updated: moment().format(),
             })
               .then(() => listRef); // pass on the reference
           }
           // create
           return myListsRef.push({
+            // _created: moment().format(),
             ...bundle,
           });
         })
